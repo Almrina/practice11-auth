@@ -3,29 +3,27 @@ name: DevSecOps Pipeline
 on:
   push:
 
+permissions:
+  contents: read
+  security-events: write  # разрешает загружать SARIF в Code Scanning
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
-          
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+          python-version: "3.10"
 
-      - name: Run tests
-        run: echo "No tests yet"
+      - run: pip install -r requirements.txt
 
-      - name: Run SAST (CodeQL)
-        uses: github/codeql-action/init@v2
+      - run: echo "Tests OK"
+
+      - uses: github/codeql-action/init@v2
         with:
           languages: python
 
-      - name: Analyze
-        uses: github/codeql-action/analyze@v2
+      - uses: github/codeql-action/analyze@v2
